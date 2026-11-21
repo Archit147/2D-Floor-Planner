@@ -1,0 +1,15 @@
+{
+  "title": "Studio Office",
+  "units": "cm",
+  "entities": [
+    {"id":"c1","type":"wall","points":[{"x":0,"y":0},{"x":1200,"y":0}],"thickness":16},
+    {"id":"c2","type":"wall","points":[{"x":1200,"y":0},{"x":1200,"y":800}],"thickness":16},
+    {"id":"c3","type":"wall","points":[{"x":1200,"y":800},{"x":0,"y":800}],"thickness":16},
+    {"id":"c4","type":"wall","points":[{"x":0,"y":800},{"x":0,"y":0}],"thickness":16},
+    {"id":"c5","type":"wall","points":[{"x":400,"y":0},{"x":400,"y":520}],"thickness":10},
+    {"id":"c6","type":"wall","points":[{"x":400,"y":520},{"x":1200,"y":520}],"thickness":10},
+    {"id":"c7","type":"wall","points":[{"x":820,"y":520},{"x":820,"y":800}],"thickness":10},
+    {"id":"c8","type":"rectangle","points":[{"x":80,"y":100},{"x":320,"y":300}],"color":"#6ca6a1"},
+    {"id":"c9","type":"rectangle","points":[{"x":480,"y":600},{"x":760,"y":740}],"color":"#7893b6"}
+  ]
+}

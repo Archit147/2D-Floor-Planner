@@ -1,0 +1,15 @@
+{
+  "title": "Compact 1BHK",
+  "units": "cm",
+  "entities": [
+    {"id":"a1","type":"wall","points":[{"x":0,"y":0},{"x":800,"y":0}],"thickness":14},
+    {"id":"a2","type":"wall","points":[{"x":800,"y":0},{"x":800,"y":600}],"thickness":14},
+    {"id":"a3","type":"wall","points":[{"x":800,"y":600},{"x":0,"y":600}],"thickness":14},
+    {"id":"a4","type":"wall","points":[{"x":0,"y":600},{"x":0,"y":0}],"thickness":14},
+    {"id":"a5","type":"wall","points":[{"x":480,"y":0},{"x":480,"y":430}],"thickness":10},
+    {"id":"a6","type":"wall","points":[{"x":480,"y":430},{"x":800,"y":430}],"thickness":10},
+    {"id":"a7","type":"line","points":[{"x":70,"y":250},{"x":400,"y":250}],"color":"#6ca6a1"},
+    {"id":"a8","type":"rectangle","points":[{"x":80,"y":70},{"x":290,"y":210}],"color":"#7893b6"},
+    {"id":"a9","type":"circle","points":[{"x":640,"y":180},{"x":690,"y":180}],"color":"#d29b61"}
+  ]
+}

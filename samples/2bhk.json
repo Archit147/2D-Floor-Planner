@@ -1,0 +1,15 @@
+{
+  "title": "Family 2BHK",
+  "units": "cm",
+  "entities": [
+    {"id":"b1","type":"wall","points":[{"x":0,"y":0},{"x":1000,"y":0}],"thickness":14},
+    {"id":"b2","type":"wall","points":[{"x":1000,"y":0},{"x":1000,"y":700}],"thickness":14},
+    {"id":"b3","type":"wall","points":[{"x":1000,"y":700},{"x":0,"y":700}],"thickness":14},
+    {"id":"b4","type":"wall","points":[{"x":0,"y":700},{"x":0,"y":0}],"thickness":14},
+    {"id":"b5","type":"wall","points":[{"x":500,"y":0},{"x":500,"y":700}],"thickness":10},
+    {"id":"b6","type":"wall","points":[{"x":0,"y":350},{"x":500,"y":350}],"thickness":10},
+    {"id":"b7","type":"wall","points":[{"x":500,"y":440},{"x":1000,"y":440}],"thickness":10},
+    {"id":"b8","type":"rectangle","points":[{"x":80,"y":70},{"x":370,"y":270}],"color":"#7893b6"},
+    {"id":"b9","type":"rectangle","points":[{"x":570,"y":80},{"x":880,"y":280}],"color":"#6ca6a1"}
+  ]
+}

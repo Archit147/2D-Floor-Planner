@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f1f3f2">
+  <title>Meridian Studio | Floor Plan CAD</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script type="module" src="{{ url_for('static', filename='js/main.js') }}"></script>
+</head>
+<body>
+  <div id="intro-loader" class="intro-loader" role="status" aria-label="Loading Meridian Studio">
+    <div class="intro-grid" aria-hidden="true"></div>
+    <div class="intro-sweep" aria-hidden="true"></div>
+    <div class="intro-content">
+      <div class="intro-lockup">
+        <span class="intro-mark" aria-hidden="true"><i></i><b></b><em></em></span>
+        <div class="intro-name"><div id="intro-wordmark" class="intro-wordmark" aria-hidden="true"></div><span class="intro-studio">STUDIO</span></div>
+      </div>
+      <div class="intro-progress"><span class="intro-progress-track"><i></i></span><span class="intro-loading-label">PREPARING WORKSPACE</span></div>
+      <div class="intro-footer"><span>ARCHITECTURAL DRAWING ENVIRONMENT</span><span>2D&nbsp; + &nbsp;3D</span></div>
+    </div>
+  </div>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Meridian Studio home"><span class="brand-mark" aria-hidden="true"><i></i><b></b></span><span>meridian<span class="brand-suffix">studio</span></span></a>
+    <div class="document-name"><input id="document-title" aria-label="Plan title" value="Untitled plan"><span class="save-state">Local autosave ready</span></div>
+    <nav class="top-actions" aria-label="Document actions">
+      <button id="undo" class="text-button" type="button" title="Undo (Ctrl+Z)" disabled>Undo</button>
+      <button id="redo" class="text-button" type="button" title="Redo (Ctrl+Y)" disabled>Redo</button>
+      <span class="top-divider"></span>
+      <button id="new-plan" class="text-button" type="button" title="New plan">New</button>
+      <button id="open-plan" class="text-button" type="button" title="Open a project or sample">Open</button>
+      <button id="download-json" class="text-button" type="button" title="Download local JSON">JSON</button>
+      <select id="export-format" class="export-format" aria-label="Export format"><option value="svg">SVG</option><option value="png">PNG</option><option value="pdf">PDF</option><option value="dxf">DXF</option></select>
+      <button id="export-plan" class="text-button" type="button" title="Export file">Export</button>
+      <button id="print-plan" class="text-button" type="button" title="Print preview">Print</button>
+      <button id="theme-toggle" class="text-button" type="button" title="Toggle light and dark workspace">Theme</button>
+      <a class="text-button lab-link" href="/lab">Lab</a>
+      <button id="help-button" class="text-button" type="button" title="Keyboard shortcuts">?</button>
+      <button id="save-plan" class="primary-button" type="button">Save</button>
+    </nav>
+  </header>
+
+  <main class="workspace">
+    <aside class="toolbar" aria-label="Drawing tools">
+      <div class="tool-group-label">DRAW</div>
+      <button class="tool-button active" type="button" data-tool="select" aria-pressed="true" title="Select (V)"><span class="tool-glyph cursor-glyph">↖</span><span>Select</span></button>
+      <button class="tool-button" type="button" data-tool="wall" title="Wall (W)"><span class="tool-glyph">╱</span><span>Wall</span></button>
+      <button class="tool-button" type="button" data-tool="room" title="Draw a rectangular wall area using four walls"><span class="tool-glyph square-glyph"></span><span>Room</span></button>
+      <button class="tool-button" type="button" data-tool="line" title="Line (L)"><span class="tool-glyph">／</span><span>Line</span></button>
+      <button class="tool-button" type="button" data-tool="rectangle" title="Rectangle (R)"><span class="tool-glyph square-glyph"></span><span>Rectangle</span></button>
+      <button class="tool-button" type="button" data-tool="circle" title="Circle (C)"><span class="tool-glyph">◯</span><span>Circle</span></button>
+      <button class="tool-button" type="button" data-tool="door" title="Door"><span class="tool-glyph">⌒</span><span>Door</span></button>
+      <button class="tool-button" type="button" data-tool="window" title="Window"><span class="tool-glyph">▤</span><span>Window</span></button>
+      <button class="tool-button" type="button" data-tool="furniture" title="Furniture"><span class="tool-glyph">▣</span><span>Furniture</span></button>
+      <button class="tool-button" type="button" data-tool="dimension" title="Dimension"><span class="tool-glyph">↔</span><span>Dimension</span></button>
+      <button class="tool-button" type="button" data-tool="text" title="Text label"><span class="tool-glyph">T</span><span>Text</span></button>
+      <label class="algorithm-select"><span>RENDER</span><select id="algorithm-mode" aria-label="Rasterization mode"><option value="native">Canvas</option><option value="custom">Custom</option></select></label>
+      <div class="toolbar-spacer"></div>
+      <button id="sidebar-lab" class="tool-button bottom-tool" type="button" title="Open Algorithm Lab"><span class="tool-glyph">⌘</span><span>Lab</span></button>
+    </aside>
+
+    <section class="drawing-area" aria-label="Plan canvas">
+      <div class="canvas-toolbar">
+        <div class="tool-context"><span class="context-dot"></span><span id="active-tool-name">Select</span><span id="tool-hint" class="context-hint">Pan with Space + drag</span></div>
+        <label class="command-wrap"><span>↵</span><input id="command-input" type="text" aria-label="Command line" placeholder="5000 or @3000&lt;90" title="Enter a length in millimeters or @length&lt;angle"></label>
+        <div class="view-switch" role="group" aria-label="Drawing view">
+          <button id="view-mode-2d" class="view-mode active" type="button" aria-pressed="true">2D</button>
+          <button id="view-mode-3d" class="view-mode" type="button" aria-pressed="false">3D</button>
+        </div>
+        <div class="canvas-actions">
+          <button id="room-metrics" class="icon-button fit-button" type="button" aria-pressed="false" title="Analyze closed wall rooms">Rooms</button>
+          <button id="grid-toggle" class="icon-button selected" type="button" aria-pressed="true" title="Toggle grid">▦</button>
+          <button id="zoom-out" class="icon-button" type="button" title="Zoom out">−</button>
+          <output id="zoom-level" class="zoom-level">100%</output>
+          <button id="zoom-in" class="icon-button" type="button" title="Zoom in">+</button>
+          <button id="fit-view" class="icon-button fit-button" type="button" title="Reset view">Fit</button>
+        </div>
+      </div>
+      <div class="canvas-wrap" id="canvas-wrap">
+        <canvas id="plan-canvas" aria-label="Floor plan drawing canvas"></canvas>
+        <div class="canvas-empty-state" aria-hidden="true">
+          <span class="empty-crosshair">+</span>
+          <span>Drawing area</span>
+        </div>
+        <section id="three-inset" class="three-inset" aria-label="Live 3D model preview">
+          <header class="three-inset-header"><span><i class="three-live-dot"></i>3D MODEL</span><button id="expand-model" type="button" title="Open the 3D modeling view" aria-label="Expand 3D view">↗</button></header>
+          <div id="three-inset-mount" class="three-mount"></div>
+          <button id="inset-move-mode" class="inset-move-mode" type="button" aria-pressed="false" title="Enable object movement in 3D">Move</button>
+          <div id="three-inset-message" class="three-inset-message" hidden>3D engine loading…</div>
+        </section>
+        <section id="three-stage" class="three-stage" aria-label="3D floor plan modeling view" hidden>
+          <header class="three-stage-toolbar">
+            <div class="three-stage-title"><i class="three-live-dot"></i><span>3D MODEL</span><small>Shared plan geometry</small></div>
+            <div class="three-stage-actions">
+              <div class="view-switch three-edit-switch" role="group" aria-label="3D interaction mode"><button id="three-orbit-mode" class="view-mode active" type="button" aria-pressed="true">Orbit</button><button id="three-move-mode" class="view-mode" type="button" aria-pressed="false">Move</button></div>
+              <button id="three-reset-camera" class="icon-button fit-button" type="button" title="Reset 3D camera">Reset view</button>
+              <button id="return-to-2d" class="return-2d-button" type="button" title="Return to the 2D drawing">2D plan</button>
+            </div>
+          </header>
+          <div id="three-full-mount" class="three-mount three-full-mount"></div>
+          <div id="three-stage-message" class="three-stage-message" hidden>Loading 3D engine…</div>
+          <div class="three-stage-hint">Arrow keys to move · Shift for faster movement · Drag to orbit · Scroll to zoom · Move mode to edit objects</div>
+        </section>
+      </div>
+      <footer class="statusbar">
+        <span class="status-coordinate" id="coordinates">X 0.00 m&nbsp;&nbsp; Y 0.00 m</span>
+        <span class="status-spacer"></span>
+        <label class="status-toggle"><input id="snap-toggle" type="checkbox" checked><span>Grid snap</span></label>
+        <span class="status-separator"></span>
+        <select id="snap-mode" class="snap-mode" aria-label="Object snap mode"><option value="nearest">Object snaps</option><option value="endpoint">Endpoint</option><option value="midpoint">Midpoint</option><option value="center">Center</option><option value="intersection">Intersection</option><option value="perpendicular">Perpendicular</option></select>
+        <span class="status-separator"></span>
+        <span>Metric</span>
+        <span class="status-separator"></span>
+        <span id="snap-state">On</span>
+        <span class="status-separator"></span>
+        <span id="entity-count">0 objects</span>
+      </footer>
+    </section>
+
+    <aside class="properties-panel" aria-label="Properties">
+      <div class="panel-heading"><h1>Properties</h1><button class="panel-menu" type="button" aria-label="Panel options">···</button></div>
+      <div class="empty-selection">
+        <span class="selection-icon"><span></span></span>
+        <strong>Nothing selected</strong>
+        <p>Select an object on the canvas to inspect its properties.</p>
+      </div>
+      <div class="panel-section">
+        <div class="section-title"><span>LAYERS</span><button type="button" class="small-action" aria-label="Add layer" disabled>+</button></div>
+        <div class="layer-row"><input class="layer-visibility" data-layer-visibility="Walls" type="checkbox" checked aria-label="Show Walls"><span class="layer-swatch swatch-walls"></span><span class="layer-name">Walls</span><span class="layer-count" data-layer-count="Walls">0</span></div>
+        <div class="layer-row muted-layer"><input class="layer-visibility" data-layer-visibility="Doors &amp; windows" type="checkbox" checked aria-label="Show doors and windows"><span class="layer-swatch swatch-doors"></span><span class="layer-name">Doors &amp; windows</span><span class="layer-count" data-layer-count="Doors &amp; windows">0</span></div>
+        <div class="layer-row muted-layer"><input class="layer-visibility" data-layer-visibility="Furniture" type="checkbox" checked aria-label="Show Furniture"><span class="layer-swatch swatch-furniture"></span><span class="layer-name">Furniture</span><span class="layer-count" data-layer-count="Furniture">0</span></div>
+        <div class="layer-row muted-layer"><input class="layer-visibility" data-layer-visibility="Dimensions" type="checkbox" checked aria-label="Show Dimensions"><span class="layer-swatch swatch-dimensions"></span><span class="layer-name">Dimensions</span><span class="layer-count" data-layer-count="Dimensions">0</span></div>
+        <div class="layer-row muted-layer"><input class="layer-visibility" data-layer-visibility="Text &amp; labels" type="checkbox" checked aria-label="Show Text and labels"><span class="layer-swatch swatch-text"></span><span class="layer-name">Text &amp; labels</span><span class="layer-count" data-layer-count="Text &amp; labels">0</span></div>
+      </div>
+      <section id="selection-properties" class="panel-section selection-properties">
+        <div class="section-title"><span>SELECTED OBJECT</span><span id="selection-id"></span></div>
+        <label class="property-field">Type<input id="property-type" readonly></label>
+        <label class="property-field">Layer<select id="property-layer"><option>Walls</option><option>Doors &amp; windows</option><option>Furniture</option><option>Dimensions</option><option>Text &amp; labels</option></select></label>
+        <label class="property-field">Thickness<input id="property-thickness" type="number" min="1" max="200" step="1"></label>
+        <label class="property-field">3D height<input id="property-height" type="number" min="1" max="1000" step="1"></label>
+        <label class="property-field">Label<input id="property-label" type="text" maxlength="80"></label>
+        <label class="property-field">Locked<input id="property-locked" type="checkbox"></label>
+        <div class="property-actions"><button id="rotate-selection" type="button" title="Rotate 90 degrees">↻</button><button id="mirror-selection" type="button" title="Mirror horizontally">⇄</button><button id="duplicate-selection" type="button" title="Duplicate">⧉</button></div>
+      </section>
+      <label class="furniture-choice">FURNITURE SYMBOL<select id="furniture-kind"><option>Bed</option><option>Sofa</option><option>Table</option><option>Chair</option><option>Wardrobe</option><option>Toilet</option><option>Sink</option><option>Bathtub</option><option>Stove</option></select></label>
+      <div class="panel-note"><span class="note-mark">i</span><span>Drawing workspace</span></div>
+    </aside>
+  </main>
+  <input id="import-json" type="file" accept="application/json,.json" hidden>
+  <dialog id="project-dialog" class="workspace-dialog">
+    <form method="dialog" class="dialog-heading"><h2>Open plan</h2><button class="dialog-close" aria-label="Close">×</button></form>
+    <div id="project-list" class="project-list"></div>
+    <div class="dialog-footer"><button id="import-plan" class="secondary-button" type="button">Import JSON</button><button class="secondary-button" value="close">Close</button></div>
+  </dialog>
+  <dialog id="shortcuts-dialog" class="workspace-dialog shortcuts-dialog">
+    <form method="dialog" class="dialog-heading"><h2>Keyboard shortcuts</h2><button class="dialog-close" aria-label="Close">×</button></form>
+    <div class="shortcut-list"><span>Select / move</span><kbd>V / M</kbd><span>Wall</span><kbd>W</kbd><span>Line</span><kbd>L</kbd><span>Rectangle</span><kbd>R</kbd><span>Grid snap</span><kbd>G</kbd><span>Algorithm mode</span><kbd>F8</kbd><span>Undo / redo</span><kbd>⌘/Ctrl Z / Y</kbd><span>Delete selection</span><kbd>Delete</kbd><span>Ortho while drawing</span><kbd>Shift</kbd><span>Pan</span><kbd>Space + drag</kbd><span>Cancel</span><kbd>Esc</kbd></div>
+  </dialog>
+</body>
+</html>

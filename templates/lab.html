@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f1f3f2">
+  <title>Algorithm Lab | Meridian Studio</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/lab.css') }}">
+  <script type="module" src="{{ url_for('static', filename='js/lab/main.js') }}"></script>
+</head>
+<body class="lab-page">
+  <div id="intro-loader" class="intro-loader" role="status" aria-label="Loading Meridian Studio">
+    <div class="intro-grid" aria-hidden="true"></div>
+    <div class="intro-sweep" aria-hidden="true"></div>
+    <div class="intro-content">
+      <div class="intro-lockup">
+        <span class="intro-mark" aria-hidden="true"><i></i><b></b><em></em></span>
+        <div class="intro-name"><div id="intro-wordmark" class="intro-wordmark" aria-hidden="true"></div><span class="intro-studio">STUDIO</span></div>
+      </div>
+      <div class="intro-progress"><span class="intro-progress-track"><i></i></span><span class="intro-loading-label">PREPARING WORKSPACE</span></div>
+      <div class="intro-footer"><span>COMPUTER GRAPHICS LABORATORY</span><span>MERIDIAN</span></div>
+    </div>
+  </div>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Return to Meridian Studio"><span class="brand-mark" aria-hidden="true"><i></i><b></b></span><span>meridian<span class="brand-suffix">studio</span></span></a>
+    <div class="document-name"><strong>Algorithm Lab</strong><span class="save-state">Computer Graphics · Interactive traces</span></div>
+    <nav class="top-actions"><a class="text-button lab-link" href="/">Back to drawing</a></nav>
+  </header>
+  <main class="lab-layout">
+    <aside class="lab-controls">
+      <label class="field-label" for="algorithm">ALGORITHM</label>
+      <select id="algorithm" class="lab-select">
+        <option value="bresenham">Bresenham line</option><option value="dda">DDA line</option>
+        <option value="midpoint-circle">Midpoint circle</option><option value="cohen-sutherland">Cohen-Sutherland</option>
+        <option value="liang-barsky">Liang-Barsky</option><option value="sutherland-hodgman">Sutherland-Hodgman</option>
+        <option value="scanline">Scanline fill</option><option value="matrix">Matrix transform</option>
+      </select>
+      <div id="line-fields" class="field-group">
+        <label class="field-label">LINE ENDPOINTS</label>
+        <div class="number-pair"><label>x₀<input id="x0" type="number" value="2"></label><label>y₀<input id="y0" type="number" value="3"></label></div>
+        <div class="number-pair"><label>x₁<input id="x1" type="number" value="18"></label><label>y₁<input id="y1" type="number" value="11"></label></div>
+      </div>
+      <div id="circle-fields" class="field-group hidden-fields">
+        <label class="field-label">CENTER + RADIUS</label>
+        <div class="number-pair"><label>cx<input id="cx" type="number" value="12"></label><label>cy<input id="cy" type="number" value="12"></label></div>
+        <label class="inline-field">Radius<input id="radius" type="number" min="0" max="100" value="8"></label>
+      </div>
+      <div id="clip-fields" class="field-group">
+        <label class="field-label">CLIP RECTANGLE</label>
+        <div class="number-pair"><label>x min<input id="xmin" type="number" value="0"></label><label>y min<input id="ymin" type="number" value="0"></label></div>
+        <div class="number-pair"><label>x max<input id="xmax" type="number" value="20"></label><label>y max<input id="ymax" type="number" value="20"></label></div>
+      </div>
+      <div id="polygon-fields" class="field-group hidden-fields">
+        <label class="field-label" for="polygon-input">POLYGON VERTICES</label>
+        <textarea id="polygon-input" rows="5">[[-4,4],[15,4],[15,17],[-4,17]]</textarea>
+        <label class="field-label" for="clip-input">CLIP POLYGON</label>
+        <textarea id="clip-input" rows="4">[[0,0],[20,0],[20,14],[0,14]]</textarea>
+      </div>
+      <div id="matrix-fields" class="field-group hidden-fields">
+        <label class="field-label">TRANSFORM CHAIN</label>
+        <label class="range-field">Translate X <input id="tx" type="range" min="-12" max="12" value="3"><output>3</output></label>
+        <label class="range-field">Translate Y <input id="ty" type="range" min="-12" max="12" value="2"><output>2</output></label>
+        <label class="range-field">Rotation <input id="rotation" type="range" min="-180" max="180" value="25"><output>25°</output></label>
+        <label class="range-field">Scale <input id="scale" type="range" min="25" max="200" value="100"><output>1.00</output></label>
+      </div>
+      <button id="run-algorithm" class="run-button" type="button">Run algorithm <span>↗</span></button>
+      <div class="lab-compare"><div><span>CANVAS</span><strong id="js-time">—</strong></div><div><span>PYTHON API</span><strong id="python-time">—</strong></div></div>
+      <div id="comparison-status" class="comparison-status" data-match="pending">Waiting for Python</div>
+    </aside>
+    <section class="lab-stage">
+      <div class="lab-stage-header"><div><span class="context-dot"></span><strong id="algorithm-title">Bresenham line</strong></div><span id="step-count">Ready</span></div>
+      <div class="lab-canvas-wrap"><canvas id="lab-canvas" aria-label="Algorithm pixel visualization"></canvas></div>
+      <div class="lab-stage-footer"><span id="lab-summary">Configure an algorithm, then run it to compare the implementation and trace.</span><span>Custom rasterizer · Canvas renderer</span></div>
+    </section>
+    <aside class="lab-trace-panel"><div class="panel-heading"><h1>Step trace</h1><span class="trace-count" id="trace-count">0</span></div><div id="trace-list" class="trace-list"><p>Algorithm decisions appear here.</p></div><div class="matrix-display"><span>TRANSFORM MATRIX</span><pre id="matrix-value">1.000  0.000  0.000 / 0.000  1.000  0.000 / 0.000  0.000  1.000</pre></div></aside>
+  </main>
+</body>
+</html>
